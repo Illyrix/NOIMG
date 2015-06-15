@@ -40,7 +40,7 @@ private:
 	};	
 public:
 	static bool out;       //循环控制
-	static gameClass* createObj(bool load)
+	static gameClass* createObj(bool load)	//单例模式
 	{
 		static gameClass m_Init(load);
 		return &m_Init;
