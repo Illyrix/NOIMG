@@ -54,7 +54,33 @@ class maptree :public tree
 {
 private:
 	std::map<CString,CString> feature;
-	CString name;
 public:
+	maptree(std::map<CString,CString> featureInput)
+	{
+		feature = featureInput;
+	}
+
+	CString getFeature(CString key)
+	{
+		auto i = feature.find(key);
+		if (i != feature.end())
+		{
+			return i->second;
+		}
+		else
+			return L"";
+	}
+
+	bool setFeature(CString key, CString value)
+	{
+		auto i = feature.find(key);
+		if (i != feature.end())
+		{
+			i->second = value;
+			return true;
+		}
+		else
+			return (feature.insert(std::pair<CString, CString>(key, value))).second;
+	}
 
 };

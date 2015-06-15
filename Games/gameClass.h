@@ -7,6 +7,10 @@ class gameClass
 private:
 
 	std::deque<command> LIST_OF_COMMAND;
+	//在这里添加私有成员
+	maptree now_tree;
+	std::list<maptree> all_trees;
+
 	//在这里添加命令的实现
 
 
@@ -37,6 +41,40 @@ private:
 
 		LIST_OF_COMMAND.push_back(*new command(L"exit", &gameClass::exit));
 		LIST_OF_COMMAND.push_back(*new command(L"ls", &gameClass::ls));
+
+
+
+		//这里添加希望游戏一开始处理的代码
+		if (load)
+		{
+			//从存档中读取
+			CString buffers;
+			int length=(GetPrivateProfileStringW(L"maplist",L"lists",NULL, (LPWSTR)(LPCWSTR)buffers,65535,L".\\config.ini"));
+			int lists = _ttoi(buffers);
+			for (int i = 0; i < lists; i++)
+			{
+				CString mapname;
+				mapname.Format(_T("%d"),i);
+				mapname = L"map" + mapname;
+				length= (GetPrivateProfileSectionW(mapname, (LPWSTR)(LPCWSTR)buffers, 65535, L".\\config.ini"));
+				if (buffers == "\0\0")
+				{
+								//读取失败
+				}
+				else
+				{
+					int j=0;
+					do 
+					{
+						Afx
+					} while (true);
+				}
+			}
+		}
+		else
+		{
+			//新建游戏
+		}
 	};	
 public:
 	static bool out;       //循环控制
