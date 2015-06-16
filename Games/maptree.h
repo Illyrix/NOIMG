@@ -55,7 +55,7 @@ class maptree :public tree
 private:
 	std::map<CString,CString> feature;
 public:
-	maptree(std::map<CString,CString> featureInput)
+	maptree(std::map<CString,CString> &featureInput)
 	{
 		feature = featureInput;
 	}

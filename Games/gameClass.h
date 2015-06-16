@@ -8,7 +8,7 @@ private:
 
 	std::deque<command> LIST_OF_COMMAND;
 	//在这里添加私有成员
-	maptree now_tree;
+	maptree* now_tree;
 	std::list<maptree> all_trees;
 
 	//在这里添加命令的实现
@@ -49,27 +49,53 @@ private:
 		{
 			//从存档中读取
 			CString buffers;
-			int length=(GetPrivateProfileStringW(L"maplist",L"lists",NULL, (LPWSTR)(LPCWSTR)buffers,65535,L".\\config.ini"));
+			int length=(GetPrivateProfileString(L"maps",L"lists",NULL, (LPWSTR)(LPCWSTR)buffers,65535,L".\\config.ini"));
 			int lists = _ttoi(buffers);
+			GetPrivateProfileString(L"maps", L"nowmap", NULL, (LPWSTR)(LPCWSTR)buffers, 65535, L".\\config.ini");
+			int nowmap = _ttoi(buffers);
 			for (int i = 0; i < lists; i++)
 			{
 				CString mapname;
 				mapname.Format(_T("%d"),i);
 				mapname = L"map" + mapname;
-				length= (GetPrivateProfileSectionW(mapname, (LPWSTR)(LPCWSTR)buffers, 65535, L".\\config.ini"));
-				if (buffers == "\0\0")
+				std::wcout << (LPCTSTR)mapname<<std::endl;
+				length= (GetPrivateProfileSection(mapname, (LPWSTR)(LPCWSTR)buffers, 65535, L".\\config.ini"));
+				if ((buffers[0]=='\0'))
 				{
-								//读取失败
+					std::wcout << L"存档损坏"<<std::endl;			//读取失败
+					out = 0;
 				}
 				else
 				{
 					int j=0;
-					do 
+					int another_NULL = 1;
+					std::map<CString,CString> keyValueMap;
+					std::deque<CString> keyvalue;
+					CString temp;
+					do {
+						if (buffers[j] != L'\0')
+							temp += buffers[j];
+						else
+						{
+							keyvalue.push_back(temp);
+							temp.Empty();
+						}
+						j++;
+					} while ((buffers[j - 1] != L'\0') || (buffers[j] != L'\0'));//分割成键/值对的队列
+					for (auto k = keyvalue.begin(); k != keyvalue.end(); k++)
 					{
-						Afx
-					} while (true);
+						int devide_pos = k->Find(_T(" "));
+						CString key_str = k->Left(devide_pos);
+						CString value_str = k->Right(k->GetLength() - devide_pos - 1);
+						keyValueMap.insert(std::pair<CString,CString>(key_str,value_str));
+					}
+					maptree temp_maptree(keyValueMap);
+					all_trees.push_back(temp_maptree);
+					if (nowmap == i)
+						now_tree = &(*(all_trees.rend()));
 				}
 			}
+			std::wcout<<(LPCTSTR)now_tree->getFeature(L"name");
 		}
 		else
 		{
@@ -85,10 +111,10 @@ public:
 	}
 	CString exe(CString);
 
-	~gameClass()	//析构函数，在其中添加自动保存等功能
+	/*~gameClass()	//析构函数，在其中添加自动保存等功能
 	{
 		
-	}
+	}*/
 };
 bool gameClass::out = true;
 
