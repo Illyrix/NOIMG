@@ -22,7 +22,11 @@ private:
 
 	//在这里添加命令的实现
 
-
+	CString cls(CString param)
+	{
+		system("cls");
+		return L"";
+	}
 
 	CString exit(CString param)
 	{
@@ -192,6 +196,7 @@ private:
 		LIST_OF_COMMAND.push_back(*new command(L"exit", &gameClass::exit));
 		LIST_OF_COMMAND.push_back(*new command(L"ls", &gameClass::ls));
 		LIST_OF_COMMAND.push_back(*new command(L"cd", &gameClass::cd));
+		LIST_OF_COMMAND.push_back(*new command(L"cls", &gameClass::cls));
 
 
 
