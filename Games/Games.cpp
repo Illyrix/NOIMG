@@ -8,7 +8,7 @@ int _tmain(int argc, _TCHAR* argv[])
 	SetConsoleTitle(L"闲得蛋疼的游戏");    //设置控制台程序的标题
 	wchar_t inputWchar[256];          //宽字节缓存
 	bool load;		//是否读取配置
-	while (1)
+	while (1)			
 	{
 		std::wcout << L">Continue Or Not [Y/N]:";
 		std::wcin.getline(inputWchar, 256);
@@ -25,7 +25,11 @@ int _tmain(int argc, _TCHAR* argv[])
 		}
 		std::wcout<<L">Input Invalid!"<<std::endl;
 	}
+
+
 	gameClass &mainGame = *gameClass::createObj(load);
+	//这里添加新进程
+	
 	while (gameClass::out)
 	{
 		std::wcout << L">";
